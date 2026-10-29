@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.soapp.feature.feed.presentation.FeedScreen
+import com.example.soapp.navigation.MainScreen
 import com.example.soapp.ui.theme.SoAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SoAppTheme {
-                FeedScreen()
+                MainScreen()
             }
         }
     }
