@@ -11,16 +11,21 @@ interface MockProfileDataSource {
 
 class MockProfileDataSourceImpl : MockProfileDataSource {
 
-    private val profile = UserProfile(
-        id = "user_1",
-        name = "Somchai Dev",
-        handle = "@somchai_dev",
-        bio = "Android Developer | Kotlin & Jetpack Compose Enthusiast 🚀 | Building awesome mobile apps",
-        avatarUrl = null,
-        postCount = 12,
-        followerCount = 1250,
-        followingCount = 380
-    )
+    private var isProUser: Boolean = false
+
+    private val profile: UserProfile
+        get() = UserProfile(
+            id = "user_1",
+            name = "Somchai Dev",
+            handle = "@somchai_dev",
+            bio = "Android Developer | Kotlin & Jetpack Compose Enthusiast 🚀 | Building awesome mobile apps",
+            avatarUrl = null,
+            postCount = 12,
+            followerCount = 1250,
+            followingCount = 380,
+            isPro = isProUser,
+            proExpiryDate = if (isProUser) "30 พ.ย. 2026" else null
+        )
 
     private val userPosts = listOf(
         Post(

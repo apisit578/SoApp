@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.soapp.feature.feed.presentation.FeedScreen
 import com.example.soapp.feature.profile.presentation.ProfileScreen
+import com.example.soapp.feature.subscription.presentation.SubscriptionScreen
 
 enum class BottomTab(
     val title: String,
@@ -34,35 +35,44 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(BottomTab.HOME) }
+    var showSubscriptionScreen by rememberSaveable { mutableStateOf(false) }
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        bottomBar = {
-            NavigationBar {
-                BottomTab.entries.forEach { tab ->
-                    NavigationBarItem(
-                        selected = selectedTab == tab,
-                        onClick = { selectedTab = tab },
-                        icon = {
-                            Icon(
-                                imageVector = tab.icon,
-                                contentDescription = tab.title
-                            )
-                        },
-                        label = { Text(tab.title) }
-                    )
+    if (showSubscriptionScreen) {
+        SubscriptionScreen(
+            onClose = { showSubscriptionScreen = false }
+        )
+    } else {
+        Scaffold(
+            modifier = modifier.fillMaxSize(),
+            bottomBar = {
+                NavigationBar {
+                    BottomTab.entries.forEach { tab ->
+                        NavigationBarItem(
+                            selected = selectedTab == tab,
+                            onClick = { selectedTab = tab },
+                            icon = {
+                                Icon(
+                                    imageVector = tab.icon,
+                                    contentDescription = tab.title
+                                )
+                            },
+                            label = { Text(tab.title) }
+                        )
+                    }
                 }
             }
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            when (selectedTab) {
-                BottomTab.HOME -> FeedScreen()
-                BottomTab.PROFILE -> ProfileScreen()
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                when (selectedTab) {
+                    BottomTab.HOME -> FeedScreen()
+                    BottomTab.PROFILE -> ProfileScreen(
+                        onOpenSubscription = { showSubscriptionScreen = true }
+                    )
+                }
             }
         }
     }

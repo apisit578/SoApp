@@ -11,5 +11,7 @@ data class UserProfile(
     val avatarUrl: String? = null,
     val postCount: Int = 0,
     val followerCount: Int = 0,
-    val followingCount: Int = 0
+    val followingCount: Int = 0,
+    val isPro: Boolean = false,
+    val proExpiryDate: String? = null
 )

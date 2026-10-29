@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,6 +46,7 @@ import com.example.soapp.core.model.UserProfile
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    onOpenSubscription: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = viewModel(factory = ProfileViewModel.provideFactory())
 ) {
@@ -75,7 +78,11 @@ fun ProfileScreen(
                 is ProfileUiState.Success -> {
                     ProfileContent(
                         profile = state.profile,
-                        posts = state.posts
+                        posts = state.posts,
+                        onOpenSubscription = {
+                            onOpenSubscription()
+                            viewModel.loadProfile()
+                        }
                     )
                 }
                 is ProfileUiState.Error -> {
@@ -99,6 +106,7 @@ fun ProfileScreen(
 private fun ProfileContent(
     profile: UserProfile,
     posts: List<Post>,
+    onOpenSubscription: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -108,7 +116,10 @@ private fun ProfileContent(
     ) {
         // Header Section
         item {
-            ProfileHeader(profile = profile)
+            ProfileHeader(
+                profile = profile,
+                onOpenSubscription = onOpenSubscription
+            )
         }
 
         item {
@@ -149,6 +160,7 @@ private fun ProfileContent(
 @Composable
 private fun ProfileHeader(
     profile: UserProfile,
+    onOpenSubscription: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -161,13 +173,13 @@ private fun ProfileHeader(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(CircleShape),
-                color = MaterialTheme.colorScheme.primary
+                color = if (profile.isPro) Color(0xFFD4AF37) else MaterialTheme.colorScheme.primary
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Text(
                         text = profile.name.take(1),
                         style = MaterialTheme.typography.headlineLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = if (profile.isPro) Color.Black else MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -188,11 +200,29 @@ private fun ProfileHeader(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
-            text = profile.name,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = profile.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            if (profile.isPro) {
+                Spacer(modifier = Modifier.width(6.dp))
+                Surface(
+                    color = Color(0xFFD4AF37),
+                    shape = CircleShape
+                ) {
+                    Text(
+                        text = " PRO ",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                    )
+                }
+            }
+        }
+
         Text(
             text = profile.handle,
             style = MaterialTheme.typography.bodySmall,
@@ -207,6 +237,49 @@ private fun ProfileHeader(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Subscription Banner
+        Card(
+            onClick = onOpenSubscription,
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = if (profile.isPro) Color(0xFFFFF9E6) else MaterialTheme.colorScheme.primaryContainer
+            )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = if (profile.isPro) "สมาชิก SoApp Pro (เปิดใช้งานอยู่) ✨" else "ยกระดับสู่ SoApp Pro 🚀",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = if (profile.isPro) Color(0xFFB8860B) else MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        text = if (profile.isPro) "หมดอายุ: ${profile.proExpiryDate}" else "ปลดล็อกตรา Pro สีทอง และฟีเจอร์พรีเมียมทั้งหมด",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (profile.isPro) Color(0xFFB8860B) else MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+                Button(
+                    onClick = onOpenSubscription,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (profile.isPro) Color(0xFFD4AF37) else MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Text(
+                        text = if (profile.isPro) "จัดการ" else "สมัครเลย",
+                        color = if (profile.isPro) Color.Black else MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Action Buttons
         Row(
