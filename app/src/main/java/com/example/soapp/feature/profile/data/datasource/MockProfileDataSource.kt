@@ -2,6 +2,7 @@ package com.example.soapp.feature.profile.data.datasource
 
 import com.example.soapp.core.model.Post
 import com.example.soapp.core.model.UserProfile
+import com.example.soapp.core.session.UserSessionManager
 import kotlinx.coroutines.delay
 
 interface MockProfileDataSource {
@@ -10,22 +11,6 @@ interface MockProfileDataSource {
 }
 
 class MockProfileDataSourceImpl : MockProfileDataSource {
-
-    private var isProUser: Boolean = false
-
-    private val profile: UserProfile
-        get() = UserProfile(
-            id = "user_1",
-            name = "Somchai Dev",
-            handle = "@somchai_dev",
-            bio = "Android Developer | Kotlin & Jetpack Compose Enthusiast 🚀 | Building awesome mobile apps",
-            avatarUrl = null,
-            postCount = 12,
-            followerCount = 1250,
-            followingCount = 380,
-            isPro = isProUser,
-            proExpiryDate = if (isProUser) "30 พ.ย. 2026" else null
-        )
 
     private val userPosts = listOf(
         Post(
@@ -52,7 +37,19 @@ class MockProfileDataSourceImpl : MockProfileDataSource {
 
     override suspend fun fetchProfile(): UserProfile {
         delay(400)
-        return profile
+        val isPro = UserSessionManager.isPro.value
+        return UserProfile(
+            id = "user_1",
+            name = "Somchai Dev",
+            handle = "@somchai_dev",
+            bio = "Android Developer | Kotlin & Jetpack Compose Enthusiast 🚀 | Building awesome mobile apps",
+            avatarUrl = null,
+            postCount = 12,
+            followerCount = 1250,
+            followingCount = 380,
+            isPro = isPro,
+            proExpiryDate = if (isPro) "30 พ.ย. 2026" else null
+        )
     }
 
     override suspend fun fetchUserPosts(): List<Post> {

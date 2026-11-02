@@ -1,17 +1,18 @@
 package com.example.soapp.feature.subscription.data.datasource
 
+import com.example.soapp.core.model.PaymentResult
 import com.example.soapp.core.model.SubscriptionPlan
+import com.example.soapp.core.session.UserSessionManager
 import kotlinx.coroutines.delay
 
 interface MockSubscriptionDataSource {
     suspend fun getPlans(): List<SubscriptionPlan>
-    suspend fun purchase(planId: String): Boolean
+    suspend fun purchase(planId: String, paymentResult: PaymentResult): Boolean
+    suspend fun cancelSubscription(): Boolean
     fun isProUser(): Boolean
 }
 
 class MockSubscriptionDataSourceImpl : MockSubscriptionDataSource {
-
-    private var isPro: Boolean = false
 
     private val plans = listOf(
         SubscriptionPlan(
@@ -48,11 +49,29 @@ class MockSubscriptionDataSourceImpl : MockSubscriptionDataSource {
         return plans
     }
 
-    override suspend fun purchase(planId: String): Boolean {
-        delay(1200) // Simulate Billing sheet & payment processing
-        isPro = true
+    override suspend fun purchase(planId: String, paymentResult: PaymentResult): Boolean {
+        when (paymentResult) {
+            PaymentResult.SUCCESS -> {
+                delay(1000)
+                UserSessionManager.setProStatus(true)
+                return true
+            }
+            PaymentResult.DECLINED -> {
+                delay(800)
+                throw IllegalStateException("การชำระเงินล้มเหลว: วงเงินในบัตรไม่พอหรือบัตรโดนปฏิเสธ (Sandbox Declined)")
+            }
+            PaymentResult.CANCELLED -> {
+                delay(300)
+                return false
+            }
+        }
+    }
+
+    override suspend fun cancelSubscription(): Boolean {
+        delay(600)
+        UserSessionManager.setProStatus(false)
         return true
     }
 
-    override fun isProUser(): Boolean = isPro
+    override fun isProUser(): Boolean = UserSessionManager.isPro.value
 }
