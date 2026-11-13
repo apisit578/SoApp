@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.soapp.core.network.NetworkMonitor
 import com.example.soapp.feature.bookmark.presentation.BookmarkScreen
+import com.example.soapp.feature.chat.presentation.ChatScreen
 import com.example.soapp.feature.feed.presentation.FeedScreen
 import com.example.soapp.feature.notification.presentation.NotificationScreen
 import com.example.soapp.feature.profile.presentation.ProfileScreen
@@ -46,6 +48,7 @@ enum class BottomTab(
 ) {
     HOME("หน้าแรก", Icons.Default.Home),
     SEARCH("ค้นหา", Icons.Default.Search),
+    CHAT("ข้อความ", Icons.AutoMirrored.Filled.Send),
     BOOKMARKS("บันทึก", Icons.Default.Star),
     NOTIFICATIONS("แจ้งเตือน", Icons.Default.Info),
     PROFILE("โปรไฟล์", Icons.Default.Person),
@@ -111,6 +114,7 @@ fun MainScreen(
                     when (selectedTab) {
                         BottomTab.HOME -> FeedScreen()
                         BottomTab.SEARCH -> SearchScreen()
+                        BottomTab.CHAT -> ChatScreen()
                         BottomTab.BOOKMARKS -> BookmarkScreen()
                         BottomTab.NOTIFICATIONS -> NotificationScreen()
                         BottomTab.PROFILE -> ProfileScreen(
