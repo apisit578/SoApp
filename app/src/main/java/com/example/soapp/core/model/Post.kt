@@ -12,5 +12,6 @@ data class Post(
     val timeAgo: String,
     val likeCount: Int,
     val isLiked: Boolean = false,
-    val commentCount: Int = 0
+    val commentCount: Int = 0,
+    val isBookmarked: Boolean = false
 )

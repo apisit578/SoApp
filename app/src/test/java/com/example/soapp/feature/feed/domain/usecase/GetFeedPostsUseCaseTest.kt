@@ -75,4 +75,12 @@ private class FakeFeedRepository(
     override suspend fun createPost(content: String): Result<Post> {
         throw NotImplementedError("Not needed for this test")
     }
+
+    override suspend fun toggleBookmarkPost(postId: String): Result<Post> {
+        throw NotImplementedError("Not needed for this test")
+    }
+
+    override suspend fun getBookmarkedPosts(): Result<List<Post>> {
+        return Result.success(emptyList())
+    }
 }

@@ -7,6 +7,8 @@ interface MockFeedDataSource {
     suspend fun fetchPosts(): List<Post>
     suspend fun toggleLike(postId: String): Post
     suspend fun createPost(content: String): Post
+    suspend fun toggleBookmark(postId: String): Post
+    suspend fun fetchBookmarkedPosts(): List<Post>
 }
 
 class MockFeedDataSourceImpl : MockFeedDataSource {
@@ -20,7 +22,8 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
             timeAgo = "2ชม.",
             likeCount = 12,
             isLiked = false,
-            commentCount = 3
+            commentCount = 3,
+            isBookmarked = true
         ),
         Post(
             id = "2",
@@ -30,7 +33,8 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
             timeAgo = "5ชม.",
             likeCount = 45,
             isLiked = true,
-            commentCount = 8
+            commentCount = 8,
+            isBookmarked = false
         ),
         Post(
             id = "3",
@@ -40,7 +44,8 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
             timeAgo = "1วัน",
             likeCount = 99,
             isLiked = false,
-            commentCount = 15
+            commentCount = 15,
+            isBookmarked = false
         )
     )
 
@@ -75,9 +80,28 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
             timeAgo = "เมื่อครู่",
             likeCount = 0,
             isLiked = false,
-            commentCount = 0
+            commentCount = 0,
+            isBookmarked = false
         )
         posts.add(0, newPost)
         return newPost
+    }
+
+    override suspend fun toggleBookmark(postId: String): Post {
+        delay(200)
+        val index = posts.indexOfFirst { it.id == postId }
+        if (index != -1) {
+            val current = posts[index]
+            val updated = current.copy(isBookmarked = !current.isBookmarked)
+            posts[index] = updated
+            return updated
+        } else {
+            throw NoSuchElementException("Post not found")
+        }
+    }
+
+    override suspend fun fetchBookmarkedPosts(): List<Post> {
+        delay(300)
+        return posts.filter { it.isBookmarked }
     }
 }

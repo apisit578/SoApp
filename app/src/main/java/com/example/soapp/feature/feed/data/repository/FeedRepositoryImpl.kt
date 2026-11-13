@@ -19,4 +19,12 @@ class FeedRepositoryImpl(
     override suspend fun createPost(content: String): Result<Post> {
         return runCatching { dataSource.createPost(content) }
     }
+
+    override suspend fun toggleBookmarkPost(postId: String): Result<Post> {
+        return runCatching { dataSource.toggleBookmark(postId) }
+    }
+
+    override suspend fun getBookmarkedPosts(): Result<List<Post>> {
+        return runCatching { dataSource.fetchBookmarkedPosts() }
+    }
 }

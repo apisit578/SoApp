@@ -6,4 +6,6 @@ interface FeedRepository {
     suspend fun getFeedPosts(): Result<List<Post>>
     suspend fun toggleLikePost(postId: String): Result<Post>
     suspend fun createPost(content: String): Result<Post>
+    suspend fun toggleBookmarkPost(postId: String): Result<Post>
+    suspend fun getBookmarkedPosts(): Result<List<Post>>
 }

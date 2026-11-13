@@ -95,4 +95,12 @@ private class FakeFeedRepository(
         currentPosts.add(0, newPost)
         return Result.success(newPost)
     }
+
+    override suspend fun toggleBookmarkPost(postId: String): Result<Post> {
+        throw NotImplementedError()
+    }
+
+    override suspend fun getBookmarkedPosts(): Result<List<Post>> {
+        return Result.success(emptyList())
+    }
 }

@@ -39,4 +39,6 @@ private class FakeFeedRepo : FeedRepository {
         val newPost = Post("p1", "Somchai Dev", "@somchai_dev", null, content, "เมื่อครู่", 0, false, 0)
         return Result.success(newPost)
     }
+    override suspend fun toggleBookmarkPost(postId: String): Result<Post> = throw NotImplementedError()
+    override suspend fun getBookmarkedPosts(): Result<List<Post>> = Result.success(emptyList())
 }
