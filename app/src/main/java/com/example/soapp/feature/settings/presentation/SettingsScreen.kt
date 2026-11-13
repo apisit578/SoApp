@@ -29,6 +29,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.soapp.core.theme.AppThemePreference
 
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.example.soapp.feature.feedback.presentation.FeedbackDialog
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -36,6 +42,13 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showFeedbackDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showFeedbackDialog) {
+        FeedbackDialog(
+            onDismiss = { showFeedbackDialog = false }
+        )
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -90,7 +103,23 @@ fun SettingsScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Feedback Section
+            Text(
+                text = "การสนับสนุนและความคิดเห็น",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            OutlinedButton(
+                onClick = { showFeedbackDialog = true },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("ส่งข้อเสนอแนะเกี่ยวกับแอป 💬")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             // App Info Section
             Text(
