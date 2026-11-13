@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Refresh
@@ -34,6 +35,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +55,14 @@ fun FeedScreen(
     viewModel: FeedViewModel = viewModel(factory = FeedViewModel.provideFactory()),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var selectedPostIdForComments by rememberSaveable { mutableStateOf<String?>(null) }
+
+    if (selectedPostIdForComments != null) {
+        com.example.soapp.feature.comment.presentation.CommentBottomSheet(
+            postId = selectedPostIdForComments!!,
+            onDismiss = { selectedPostIdForComments = null }
+        )
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -88,6 +100,9 @@ fun FeedScreen(
                         posts = state.posts,
                         onLikeClick = { postId ->
                             viewModel.onEvent(FeedUiEvent.ToggleLike(postId))
+                        },
+                        onCommentClick = { postId ->
+                            selectedPostIdForComments = postId
                         }
                     )
                 }
@@ -107,6 +122,7 @@ fun FeedScreen(
 private fun FeedContent(
     posts: List<Post>,
     onLikeClick: (String) -> Unit,
+    onCommentClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -120,7 +136,8 @@ private fun FeedContent(
         ) { post ->
             PostCard(
                 post = post,
-                onLikeClick = { onLikeClick(post.id) }
+                onLikeClick = { onLikeClick(post.id) },
+                onCommentClick = { onCommentClick(post.id) }
             )
         }
     }
@@ -130,6 +147,7 @@ private fun FeedContent(
 private fun PostCard(
     post: Post,
     onLikeClick: () -> Unit,
+    onCommentClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -198,6 +216,21 @@ private fun PostCard(
                 }
                 Text(
                     text = post.likeCount.toString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.width(24.dp))
+
+                IconButton(onClick = onCommentClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = "ความคิดเห็น",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Text(
+                    text = post.commentCount.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
