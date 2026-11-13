@@ -16,4 +16,8 @@ class ProfileRepositoryImpl(
     override suspend fun getUserPosts(): Result<List<Post>> {
         return runCatching { dataSource.fetchUserPosts() }
     }
+
+    override suspend fun updateProfile(name: String, bio: String): Result<UserProfile> {
+        return runCatching { dataSource.updateProfile(name, bio) }
+    }
 }

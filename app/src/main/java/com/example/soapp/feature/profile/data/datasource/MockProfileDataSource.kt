@@ -8,9 +8,13 @@ import kotlinx.coroutines.delay
 interface MockProfileDataSource {
     suspend fun fetchProfile(): UserProfile
     suspend fun fetchUserPosts(): List<Post>
+    suspend fun updateProfile(name: String, bio: String): UserProfile
 }
 
 class MockProfileDataSourceImpl : MockProfileDataSource {
+
+    private var currentName: String = "Somchai Dev"
+    private var currentBio: String = "Android Developer | Kotlin & Jetpack Compose Enthusiast 🚀 | Building awesome mobile apps"
 
     private val userPosts = listOf(
         Post(
@@ -40,9 +44,9 @@ class MockProfileDataSourceImpl : MockProfileDataSource {
         val isPro = UserSessionManager.isPro.value
         return UserProfile(
             id = "user_1",
-            name = "Somchai Dev",
+            name = currentName,
             handle = "@somchai_dev",
-            bio = "Android Developer | Kotlin & Jetpack Compose Enthusiast 🚀 | Building awesome mobile apps",
+            bio = currentBio,
             avatarUrl = null,
             postCount = 12,
             followerCount = 1250,
@@ -55,5 +59,12 @@ class MockProfileDataSourceImpl : MockProfileDataSource {
     override suspend fun fetchUserPosts(): List<Post> {
         delay(400)
         return userPosts
+    }
+
+    override suspend fun updateProfile(name: String, bio: String): UserProfile {
+        delay(300)
+        currentName = name
+        currentBio = bio
+        return fetchProfile()
     }
 }

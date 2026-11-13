@@ -6,4 +6,5 @@ import com.example.soapp.core.model.UserProfile
 interface ProfileRepository {
     suspend fun getUserProfile(): Result<UserProfile>
     suspend fun getUserPosts(): Result<List<Post>>
+    suspend fun updateProfile(name: String, bio: String): Result<UserProfile>
 }
