@@ -1,5 +1,6 @@
 package com.example.soapp.feature.profile.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.soapp.core.model.Post
 import com.example.soapp.core.model.UserProfile
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.example.soapp.feature.follower.presentation.FollowDialog
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
@@ -51,6 +57,14 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel(factory = ProfileViewModel.provideFactory())
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showFollowDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showFollowDialog) {
+        FollowDialog(
+            userId = "user_1",
+            onDismiss = { showFollowDialog = false }
+        )
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -82,7 +96,8 @@ fun ProfileScreen(
                         onOpenSubscription = {
                             onOpenSubscription()
                             viewModel.loadProfile()
-                        }
+                        },
+                        onOpenFollowers = { showFollowDialog = true }
                     )
                 }
                 is ProfileUiState.Error -> {
@@ -107,6 +122,7 @@ private fun ProfileContent(
     profile: UserProfile,
     posts: List<Post>,
     onOpenSubscription: () -> Unit,
+    onOpenFollowers: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -118,7 +134,8 @@ private fun ProfileContent(
         item {
             ProfileHeader(
                 profile = profile,
-                onOpenSubscription = onOpenSubscription
+                onOpenSubscription = onOpenSubscription,
+                onOpenFollowers = onOpenFollowers
             )
         }
 
@@ -173,6 +190,7 @@ private fun ProfileContent(
 private fun ProfileHeader(
     profile: UserProfile,
     onOpenSubscription: () -> Unit,
+    onOpenFollowers: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -205,8 +223,16 @@ private fun ProfileHeader(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 StatItem(label = "โพสต์", count = profile.postCount)
-                StatItem(label = "ผู้ติดตาม", count = profile.followerCount)
-                StatItem(label = "กำลังติดตาม", count = profile.followingCount)
+                StatItem(
+                    label = "ผู้ติดตาม",
+                    count = profile.followerCount,
+                    onClick = onOpenFollowers
+                )
+                StatItem(
+                    label = "กำลังติดตาม",
+                    count = profile.followingCount,
+                    onClick = onOpenFollowers
+                )
             }
         }
 
@@ -318,10 +344,11 @@ private fun ProfileHeader(
 private fun StatItem(
     label: String,
     count: Int,
+    onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier,
+        modifier = if (onClick != null) modifier.clickable(onClick = onClick) else modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
