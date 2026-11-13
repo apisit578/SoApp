@@ -123,6 +123,18 @@ private fun ProfileContent(
         }
 
         item {
+            Text(
+                text = "แกลเลอรีสื่อของคุณ 🖼️",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        item {
+            com.example.soapp.feature.gallery.presentation.GalleryGrid(userId = profile.id)
+        }
+
+        item {
             HorizontalDivider(color = DividerDefaults.color)
         }
 

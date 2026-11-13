@@ -37,33 +37,38 @@ com.example.soapp/
 │   │   ├── data/
 │   │   └── presentation/
 │   │
-│   ├── search/                           # 5️⃣ Feature: Real-time Reactive Search Flow
-│   │   ├── domain/
-│   │   └── presentation/
-│   │
-│   ├── bookmark/                         # 6️⃣ Feature: Bookmarked / Saved Posts
-│   │   ├── domain/
-│   │   └── presentation/
-│   │
-│   ├── notification/                     # 7️⃣ Feature: Activity Notifications Feed
+│   ├── gallery/                          # 5️⃣ Feature: User Media Gallery Grid
 │   │   ├── domain/
 │   │   ├── data/
 │   │   └── presentation/
 │   │
-│   ├── profile/                          # 8️⃣ Feature: User Profile & Stats
+│   ├── search/                           # 6️⃣ Feature: Real-time Reactive Search Flow
+│   │   ├── domain/
+│   │   └── presentation/
+│   │
+│   ├── bookmark/                         # 7️⃣ Feature: Bookmarked / Saved Posts
+│   │   ├── domain/
+│   │   └── presentation/
+│   │
+│   ├── notification/                     # 8️⃣ Feature: Activity Notifications Feed
 │   │   ├── domain/
 │   │   ├── data/
 │   │   └── presentation/
 │   │
-│   ├── subscription/                     # 9️⃣ Feature: Subscription & Billing Sandbox
+│   ├── profile/                          # 9️⃣ Feature: User Profile & Stats
 │   │   ├── domain/
 │   │   ├── data/
 │   │   └── presentation/
 │   │
-│   ├── settings/                         # 🔟 Feature: App Settings & Theme Selection
+│   ├── subscription/                     # 🔟 Feature: Subscription & Billing Sandbox
+│   │   ├── domain/
+│   │   ├── data/
 │   │   └── presentation/
 │   │
-│   └── feedback/                         # 1️⃣1️⃣ Feature: App Feedback & Rating Dialog
+│   ├── settings/                         # 1️⃣1️⃣ Feature: App Settings & Theme Selection
+│   │   └── presentation/
+│   │
+│   └── feedback/                         # 1️⃣2️⃣ Feature: App Feedback & Rating Dialog
 │       ├── domain/
 │       ├── data/
 │       └── presentation/
@@ -79,7 +84,7 @@ com.example.soapp/
 ### 2.1 Clean Architecture (3 Layers Principle)
 1. **Domain Layer (หัวใจหลักของ Business Logic)**:
    * เขียนด้วย **Pure Kotlin 100%** ห้ามนำเข้า `import android.*`
-   * ประกอบด้วย **UseCases** (หน้าที่เดี่ยว เช่น `GetFeedPostsUseCase`, `SubmitFeedbackUseCase`, `SendChatMessageUseCase`, `ToggleBookmarkUseCase`, `SearchPostsUseCase`, `PurchaseSubscriptionUseCase`) และ **Repository Interfaces**
+   * ประกอบด้วย **UseCases** (หน้าที่เดี่ยว เช่น `GetFeedPostsUseCase`, `GetUserGalleryUseCase`, `SubmitFeedbackUseCase`, `SendChatMessageUseCase`, `ToggleBookmarkUseCase`, `SearchPostsUseCase`, `PurchaseSubscriptionUseCase`) และ **Repository Interfaces**
    * **ข้อดี:** สามารถเขียน Unit Test ทดสอบได้เร็วระดับมิลลิวินาที โดยไม่ต้องเปิด Android Emulator
 
 2. **Data Layer (ส่วนจัดการข้อมูล)**:
@@ -96,7 +101,7 @@ com.example.soapp/
 
 ## 🧪 3. คู่มือการทำ Unit Test (JVM Unit Testing Guide)
 
-ในโปรเจกต์นี้มีชุด **Unit Tests รวม 27 Test Cases** ที่ผ่านการทดสอบแบบ **Green 100%** (`:app:testDebugUnitTest`)
+ในโปรเจกต์นี้มีชุด **Unit Tests รวม 29 Test Cases** ที่ผ่านการทดสอบแบบ **Green 100%** (`:app:testDebugUnitTest`)
 
 ```bash
 # คำสั่งรัน Unit Tests ผ่าน Gradle
@@ -115,6 +120,8 @@ com.example.soapp/
 | :--- | :--- | :--- |
 | [GetFeedPostsUseCaseTest.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/test/java/com/example/soapp/feature/feed/domain/usecase/GetFeedPostsUseCaseTest.kt) | Domain UseCase | ทดสอบการคืนค่าลิสต์โพสต์สำเร็จ และทดสอบการจัดการ Exception |
 | [FeedViewModelTest.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/test/java/com/example/soapp/feature/feed/presentation/FeedViewModelTest.kt) | ViewModel & UDF | ทดสอบ `MainDispatcherRule`, การเปลี่ยน state เป็น `Success`, และการกด Like โพสต์ |
+| [GetUserGalleryUseCaseTest.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/test/java/com/example/soapp/feature/gallery/domain/usecase/GetUserGalleryUseCaseTest.kt) | Media Gallery UseCase | ทดสอบการดึงรายการรูปภาพแกลเลอรีสื่อของผู้ใช้ |
+| [GalleryViewModelTest.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/test/java/com/example/soapp/feature/gallery/presentation/GalleryViewModelTest.kt) | Gallery ViewModel | ทดสอบการโหลดรายการแกลเลอรีสื่อและการเปลี่ยน `GalleryUiState.Success` |
 | [SubmitFeedbackUseCaseTest.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/test/java/com/example/soapp/feature/feedback/domain/usecase/SubmitFeedbackUseCaseTest.kt) | Feedback UseCase | ทดสอบการตรวจจับดาว 1-5 และข้อความว่างเปล่าของการส่งข้อเสนอแนะ |
 | [FeedbackViewModelTest.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/test/java/com/example/soapp/feature/feedback/presentation/FeedbackViewModelTest.kt) | Feedback ViewModel | ทดสอบการส่งข้อเสนอแนะสำเร็จและการเปลี่ยน `isSuccess` state |
 | [SendChatMessageUseCaseTest.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/test/java/com/example/soapp/feature/chat/domain/usecase/SendChatMessageUseCaseTest.kt) | Direct Message UseCase | ทดสอบการส่งข้อความแชท และการตรวจจับข้อความว่างเปล่า |
@@ -164,44 +171,49 @@ com.example.soapp/
 * [MockFeedbackDataSource.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/feedback/data/datasource/MockFeedbackDataSource.kt) & [FeedbackRepositoryImpl.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/feedback/data/repository/FeedbackRepositoryImpl.kt)
 * [FeedbackUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/feedback/presentation/FeedbackUiState.kt), [FeedbackUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/feedback/presentation/FeedbackUiEvent.kt), [FeedbackViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/feedback/presentation/FeedbackViewModel.kt), [FeedbackDialog.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/feedback/presentation/FeedbackDialog.kt)
 
-### 4.4 Feature: Create New Post Flow (`feature/createpost`)
+### 4.4 Feature: User Media Gallery Grid (`feature/gallery`)
+* [GalleryRepository.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/gallery/domain/repository/GalleryRepository.kt) & [GetUserGalleryUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/gallery/domain/usecase/GetUserGalleryUseCase.kt)
+* [MockGalleryDataSource.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/gallery/data/datasource/MockGalleryDataSource.kt) & [GalleryRepositoryImpl.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/gallery/data/repository/GalleryRepositoryImpl.kt)
+* [GalleryUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/gallery/presentation/GalleryUiState.kt), [GalleryViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/gallery/presentation/GalleryViewModel.kt), [GalleryGrid.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/gallery/presentation/GalleryGrid.kt)
+
+### 4.5 Feature: Create New Post Flow (`feature/createpost`)
 * [CreatePostUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/createpost/domain/usecase/CreatePostUseCase.kt)
 * [CreatePostUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/createpost/presentation/CreatePostUiState.kt), [CreatePostUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/createpost/presentation/CreatePostUiEvent.kt), [CreatePostViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/createpost/presentation/CreatePostViewModel.kt), [CreatePostDialog.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/createpost/presentation/CreatePostDialog.kt)
 
-### 4.5 Feature: Post Comments Thread (`feature/comment`)
+### 4.6 Feature: Post Comments Thread (`feature/comment`)
 * [CommentRepository.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/domain/repository/CommentRepository.kt) & UseCases ([GetCommentsUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/domain/usecase/GetCommentsUseCase.kt), [AddCommentUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/domain/usecase/AddCommentUseCase.kt))
 * [MockCommentDataSource.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/data/datasource/MockCommentDataSource.kt) & [CommentRepositoryImpl.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/data/repository/CommentRepositoryImpl.kt)
 * [CommentUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/presentation/CommentUiState.kt), [CommentUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/presentation/CommentUiEvent.kt), [CommentViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/presentation/CommentViewModel.kt), [CommentBottomSheet.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/comment/presentation/CommentBottomSheet.kt)
 
-### 4.6 Feature: Direct Messages & Chat Thread (`feature/chat`)
+### 4.7 Feature: Direct Messages & Chat Thread (`feature/chat`)
 * [ChatRepository.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/domain/repository/ChatRepository.kt) & UseCases ([GetChatConversationsUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/domain/usecase/GetChatConversationsUseCase.kt), [GetChatMessagesUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/domain/usecase/GetChatMessagesUseCase.kt), [SendChatMessageUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/domain/usecase/SendChatMessageUseCase.kt))
 * [MockChatDataSource.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/data/datasource/MockChatDataSource.kt) & [ChatRepositoryImpl.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/data/repository/ChatRepositoryImpl.kt)
 * [ChatUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/presentation/ChatUiState.kt), [ChatUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/presentation/ChatUiEvent.kt), [ChatViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/presentation/ChatViewModel.kt), [ChatScreen.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/chat/presentation/ChatScreen.kt)
 
-### 4.7 Feature: Real-time Reactive Search (`feature/search`)
+### 4.8 Feature: Real-time Reactive Search (`feature/search`)
 * [SearchPostsUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/search/domain/usecase/SearchPostsUseCase.kt)
 * [SearchUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/search/presentation/SearchUiState.kt), [SearchUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/search/presentation/SearchUiEvent.kt), [SearchViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/search/presentation/SearchViewModel.kt), [SearchScreen.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/search/presentation/SearchScreen.kt)
 
-### 4.8 Feature: Bookmarked Posts (`feature/bookmark`)
+### 4.9 Feature: Bookmarked Posts (`feature/bookmark`)
 * UseCases ([ToggleBookmarkUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/bookmark/domain/usecase/ToggleBookmarkUseCase.kt), [GetBookmarkedPostsUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/bookmark/domain/usecase/GetBookmarkedPostsUseCase.kt))
 * [BookmarkUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/bookmark/presentation/BookmarkUiState.kt), [BookmarkUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/bookmark/presentation/BookmarkUiEvent.kt), [BookmarkViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/bookmark/presentation/BookmarkViewModel.kt), [BookmarkScreen.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/bookmark/presentation/BookmarkScreen.kt)
 
-### 4.9 Feature: User Notifications (`feature/notification`)
+### 4.10 Feature: User Notifications (`feature/notification`)
 * [NotificationRepository.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/domain/repository/NotificationRepository.kt) & UseCases ([GetNotificationsUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/domain/usecase/GetNotificationsUseCase.kt), [MarkNotificationAsReadUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/domain/usecase/MarkNotificationAsReadUseCase.kt))
 * [MockNotificationDataSource.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/data/datasource/MockNotificationDataSource.kt) & [NotificationRepositoryImpl.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/data/repository/NotificationRepositoryImpl.kt)
 * [NotificationUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/presentation/NotificationUiState.kt), [NotificationUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/presentation/NotificationUiEvent.kt), [NotificationViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/presentation/NotificationViewModel.kt), [NotificationScreen.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/notification/presentation/NotificationScreen.kt)
 
-### 4.10 Feature: User Profile (`feature/profile`)
+### 4.11 Feature: User Profile (`feature/profile`)
 * [ProfileRepository.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/profile/domain/repository/ProfileRepository.kt) & [GetUserProfileUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/profile/domain/usecase/GetUserProfileUseCase.kt)
 * [MockProfileDataSource.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/profile/data/datasource/MockProfileDataSource.kt) & [ProfileRepositoryImpl.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/profile/data/repository/ProfileRepositoryImpl.kt)
 * [ProfileUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/profile/presentation/ProfileUiState.kt), [ProfileViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/profile/presentation/ProfileViewModel.kt), [ProfileScreen.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/profile/presentation/ProfileScreen.kt)
 
-### 4.11 Feature: SoApp Pro Subscription & Billing Sandbox (`feature/subscription`)
+### 4.12 Feature: SoApp Pro Subscription & Billing Sandbox (`feature/subscription`)
 * [SubscriptionRepository.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/domain/repository/SubscriptionRepository.kt) & UseCases ([GetSubscriptionPlansUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/domain/usecase/GetSubscriptionPlansUseCase.kt), [PurchaseSubscriptionUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/domain/usecase/PurchaseSubscriptionUseCase.kt), [CancelSubscriptionUseCase.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/domain/usecase/CancelSubscriptionUseCase.kt))
 * [MockSubscriptionDataSource.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/data/datasource/MockSubscriptionDataSource.kt) & [SubscriptionRepositoryImpl.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/data/repository/SubscriptionRepositoryImpl.kt)
 * [SubscriptionUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/presentation/SubscriptionUiState.kt), [SubscriptionUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/presentation/SubscriptionUiEvent.kt), [SubscriptionViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/presentation/SubscriptionViewModel.kt), [SubscriptionScreen.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/subscription/presentation/SubscriptionScreen.kt)
 
-### 4.12 Feature: App Settings (`feature/settings`)
+### 4.13 Feature: App Settings (`feature/settings`)
 * [SettingsUiState.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/settings/presentation/SettingsUiState.kt), [SettingsUiEvent.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/settings/presentation/SettingsUiEvent.kt), [SettingsViewModel.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/settings/presentation/SettingsViewModel.kt), [SettingsScreen.kt](file:///Users/apisit/AndroidStudioProjects/SoApp/app/src/main/java/com/example/soapp/feature/settings/presentation/SettingsScreen.kt)
 
 ---
