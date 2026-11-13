@@ -71,4 +71,8 @@ private class FakeFeedRepository(
     override suspend fun toggleLikePost(postId: String): Result<Post> {
         throw NotImplementedError("Not needed for this test")
     }
+
+    override suspend fun createPost(content: String): Result<Post> {
+        throw NotImplementedError("Not needed for this test")
+    }
 }

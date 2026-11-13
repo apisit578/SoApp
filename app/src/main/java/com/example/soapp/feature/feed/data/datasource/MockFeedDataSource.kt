@@ -6,6 +6,7 @@ import kotlinx.coroutines.delay
 interface MockFeedDataSource {
     suspend fun fetchPosts(): List<Post>
     suspend fun toggleLike(postId: String): Post
+    suspend fun createPost(content: String): Post
 }
 
 class MockFeedDataSourceImpl : MockFeedDataSource {
@@ -44,12 +45,12 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
     )
 
     override suspend fun fetchPosts(): List<Post> {
-        delay(600) // Simulate network delay
+        delay(600)
         return posts.toList()
     }
 
     override suspend fun toggleLike(postId: String): Post {
-        delay(200) // Simulate network delay
+        delay(200)
         val index = posts.indexOfFirst { it.id == postId }
         if (index != -1) {
             val current = posts[index]
@@ -62,5 +63,21 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
         } else {
             throw NoSuchElementException("Post with id $postId not found")
         }
+    }
+
+    override suspend fun createPost(content: String): Post {
+        delay(400)
+        val newPost = Post(
+            id = "post_${System.currentTimeMillis()}",
+            authorName = "Somchai Dev",
+            authorHandle = "@somchai_dev",
+            content = content,
+            timeAgo = "เมื่อครู่",
+            likeCount = 0,
+            isLiked = false,
+            commentCount = 0
+        )
+        posts.add(0, newPost)
+        return newPost
     }
 }

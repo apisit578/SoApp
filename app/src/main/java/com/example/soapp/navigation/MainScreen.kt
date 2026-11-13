@@ -18,8 +18,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import com.example.soapp.feature.feed.presentation.FeedScreen
 import com.example.soapp.feature.profile.presentation.ProfileScreen
+import com.example.soapp.feature.search.presentation.SearchScreen
+import com.example.soapp.feature.settings.presentation.SettingsScreen
 import com.example.soapp.feature.subscription.presentation.SubscriptionScreen
 
 enum class BottomTab(
@@ -27,7 +31,9 @@ enum class BottomTab(
     val icon: ImageVector
 ) {
     HOME("หน้าแรก", Icons.Default.Home),
-    PROFILE("โปรไฟล์", Icons.Default.Person)
+    SEARCH("ค้นหา", Icons.Default.Search),
+    PROFILE("โปรไฟล์", Icons.Default.Person),
+    SETTINGS("ตั้งค่า", Icons.Default.Settings)
 }
 
 @Composable
@@ -69,9 +75,11 @@ fun MainScreen(
             ) {
                 when (selectedTab) {
                     BottomTab.HOME -> FeedScreen()
+                    BottomTab.SEARCH -> SearchScreen()
                     BottomTab.PROFILE -> ProfileScreen(
                         onOpenSubscription = { showSubscriptionScreen = true }
                     )
+                    BottomTab.SETTINGS -> SettingsScreen()
                 }
             }
         }

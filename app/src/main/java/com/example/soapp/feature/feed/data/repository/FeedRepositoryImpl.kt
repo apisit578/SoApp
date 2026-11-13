@@ -9,14 +9,14 @@ class FeedRepositoryImpl(
 ) : FeedRepository {
 
     override suspend fun getFeedPosts(): Result<List<Post>> {
-        return runCatching {
-            dataSource.fetchPosts()
-        }
+        return runCatching { dataSource.fetchPosts() }
     }
 
     override suspend fun toggleLikePost(postId: String): Result<Post> {
-        return runCatching {
-            dataSource.toggleLike(postId)
-        }
+        return runCatching { dataSource.toggleLike(postId) }
+    }
+
+    override suspend fun createPost(content: String): Result<Post> {
+        return runCatching { dataSource.createPost(content) }
     }
 }

@@ -89,4 +89,10 @@ private class FakeFeedRepository(
         }
         return Result.failure(NoSuchElementException("Post not found"))
     }
+
+    override suspend fun createPost(content: String): Result<Post> {
+        val newPost = Post("p_${System.currentTimeMillis()}", "Alice", "@alice", null, content, "เมื่อครู่", 0)
+        currentPosts.add(0, newPost)
+        return Result.success(newPost)
+    }
 }

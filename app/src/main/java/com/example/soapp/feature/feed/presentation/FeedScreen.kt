@@ -48,6 +48,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.soapp.core.model.Post
 
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import com.example.soapp.feature.createpost.presentation.CreatePostDialog
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
@@ -56,11 +60,19 @@ fun FeedScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var selectedPostIdForComments by rememberSaveable { mutableStateOf<String?>(null) }
+    var showCreatePostDialog by rememberSaveable { mutableStateOf(false) }
 
     if (selectedPostIdForComments != null) {
         com.example.soapp.feature.comment.presentation.CommentBottomSheet(
             postId = selectedPostIdForComments!!,
             onDismiss = { selectedPostIdForComments = null }
+        )
+    }
+
+    if (showCreatePostDialog) {
+        CreatePostDialog(
+            onDismiss = { showCreatePostDialog = false },
+            onPostCreated = { viewModel.onEvent(FeedUiEvent.Refresh) }
         )
     }
 
@@ -82,6 +94,15 @@ fun FeedScreen(
                     }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showCreatePostDialog = true },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "สร้างโพสต์")
+            }
         }
     ) { innerPadding ->
         Box(
