@@ -96,6 +96,21 @@ private class FakeFeedRepository(
         return Result.success(newPost)
     }
 
+    override suspend fun updatePost(postId: String, newContent: String): Result<Post> {
+        val index = currentPosts.indexOfFirst { it.id == postId }
+        if (index != -1) {
+            val updated = currentPosts[index].copy(content = newContent)
+            currentPosts[index] = updated
+            return Result.success(updated)
+        }
+        return Result.failure(NoSuchElementException())
+    }
+
+    override suspend fun deletePost(postId: String): Result<Boolean> {
+        currentPosts.removeIf { it.id == postId }
+        return Result.success(true)
+    }
+
     override suspend fun toggleBookmarkPost(postId: String): Result<Post> {
         throw NotImplementedError()
     }

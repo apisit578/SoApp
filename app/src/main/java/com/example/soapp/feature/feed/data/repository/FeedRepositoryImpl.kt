@@ -20,6 +20,14 @@ class FeedRepositoryImpl(
         return runCatching { dataSource.createPost(content) }
     }
 
+    override suspend fun updatePost(postId: String, newContent: String): Result<Post> {
+        return runCatching { dataSource.updatePost(postId, newContent) }
+    }
+
+    override suspend fun deletePost(postId: String): Result<Boolean> {
+        return runCatching { dataSource.deletePost(postId) }
+    }
+
     override suspend fun toggleBookmarkPost(postId: String): Result<Post> {
         return runCatching { dataSource.toggleBookmark(postId) }
     }

@@ -7,6 +7,8 @@ interface MockFeedDataSource {
     suspend fun fetchPosts(): List<Post>
     suspend fun toggleLike(postId: String): Post
     suspend fun createPost(content: String): Post
+    suspend fun updatePost(postId: String, newContent: String): Post
+    suspend fun deletePost(postId: String): Boolean
     suspend fun toggleBookmark(postId: String): Post
     suspend fun fetchBookmarkedPosts(): List<Post>
 }
@@ -85,6 +87,23 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
         )
         posts.add(0, newPost)
         return newPost
+    }
+
+    override suspend fun updatePost(postId: String, newContent: String): Post {
+        delay(300)
+        val index = posts.indexOfFirst { it.id == postId }
+        if (index != -1) {
+            val updated = posts[index].copy(content = newContent)
+            posts[index] = updated
+            return updated
+        } else {
+            throw NoSuchElementException("Post not found")
+        }
+    }
+
+    override suspend fun deletePost(postId: String): Boolean {
+        delay(300)
+        return posts.removeIf { it.id == postId }
     }
 
     override suspend fun toggleBookmark(postId: String): Post {

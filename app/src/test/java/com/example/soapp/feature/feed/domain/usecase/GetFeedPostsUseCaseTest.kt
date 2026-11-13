@@ -76,6 +76,14 @@ private class FakeFeedRepository(
         throw NotImplementedError("Not needed for this test")
     }
 
+    override suspend fun updatePost(postId: String, newContent: String): Result<Post> {
+        throw NotImplementedError("Not needed for this test")
+    }
+
+    override suspend fun deletePost(postId: String): Result<Boolean> {
+        return Result.success(true)
+    }
+
     override suspend fun toggleBookmarkPost(postId: String): Result<Post> {
         throw NotImplementedError("Not needed for this test")
     }

@@ -31,6 +31,8 @@ private class FakeFeedRepo(private val posts: List<Post>) : FeedRepository {
     override suspend fun getFeedPosts(): Result<List<Post>> = Result.success(posts)
     override suspend fun toggleLikePost(postId: String): Result<Post> = throw NotImplementedError()
     override suspend fun createPost(content: String): Result<Post> = throw NotImplementedError()
+    override suspend fun updatePost(postId: String, newContent: String): Result<Post> = throw NotImplementedError()
+    override suspend fun deletePost(postId: String): Result<Boolean> = Result.success(true)
     override suspend fun toggleBookmarkPost(postId: String): Result<Post> = throw NotImplementedError()
     override suspend fun getBookmarkedPosts(): Result<List<Post>> = Result.success(emptyList())
 }

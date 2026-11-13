@@ -26,6 +26,8 @@ private class FakeBookmarkRepo : FeedRepository {
     override suspend fun getFeedPosts(): Result<List<Post>> = Result.success(emptyList())
     override suspend fun toggleLikePost(postId: String): Result<Post> = throw NotImplementedError()
     override suspend fun createPost(content: String): Result<Post> = throw NotImplementedError()
+    override suspend fun updatePost(postId: String, newContent: String): Result<Post> = throw NotImplementedError()
+    override suspend fun deletePost(postId: String): Result<Boolean> = Result.success(true)
     override suspend fun toggleBookmarkPost(postId: String): Result<Post> {
         isBookmarked = !isBookmarked
         return Result.success(Post("1", "Author", "@handle", null, "Content", "1h", 0, false, 0, isBookmarked))
