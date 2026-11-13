@@ -4,12 +4,18 @@ import com.example.soapp.core.model.NotificationItem
 import com.example.soapp.core.model.NotificationType
 import kotlinx.coroutines.delay
 
+import com.example.soapp.core.model.NotificationPreference
+
 interface MockNotificationDataSource {
     suspend fun fetchNotifications(): List<NotificationItem>
     suspend fun markAsRead(id: String)
+    suspend fun updatePreferences(preference: NotificationPreference): NotificationPreference
+    suspend fun fetchPreferences(): NotificationPreference
 }
 
 class MockNotificationDataSourceImpl : MockNotificationDataSource {
+
+    private var currentPreferences = NotificationPreference()
 
     private val notifications = mutableListOf(
         NotificationItem("n1", NotificationType.LIKE, "Dev Thailand", "กดถูกใจโพสต์ของคุณ", "10นาที", false),
@@ -28,5 +34,16 @@ class MockNotificationDataSourceImpl : MockNotificationDataSource {
         if (index != -1) {
             notifications[index] = notifications[index].copy(isRead = true)
         }
+    }
+
+    override suspend fun updatePreferences(preference: NotificationPreference): NotificationPreference {
+        delay(200)
+        currentPreferences = preference
+        return currentPreferences
+    }
+
+    override suspend fun fetchPreferences(): NotificationPreference {
+        delay(100)
+        return currentPreferences
     }
 }

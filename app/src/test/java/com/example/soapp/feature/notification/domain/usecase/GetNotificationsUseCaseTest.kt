@@ -1,6 +1,7 @@
 package com.example.soapp.feature.notification.domain.usecase
 
 import com.example.soapp.core.model.NotificationItem
+import com.example.soapp.core.model.NotificationPreference
 import com.example.soapp.core.model.NotificationType
 import com.example.soapp.feature.notification.domain.repository.NotificationRepository
 import kotlinx.coroutines.test.runTest
@@ -28,4 +29,6 @@ class GetNotificationsUseCaseTest {
 private class FakeNotificationRepo(private val items: List<NotificationItem>) : NotificationRepository {
     override suspend fun getNotifications(): Result<List<NotificationItem>> = Result.success(items)
     override suspend fun markAsRead(id: String): Result<Unit> = Result.success(Unit)
+    override suspend fun updatePreferences(preference: NotificationPreference): Result<NotificationPreference> = Result.success(preference)
+    override suspend fun getPreferences(): Result<NotificationPreference> = Result.success(NotificationPreference())
 }
