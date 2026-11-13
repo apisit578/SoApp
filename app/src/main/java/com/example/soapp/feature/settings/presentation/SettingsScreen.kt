@@ -105,6 +105,44 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Language Setting Section
+            val currentLang by com.example.soapp.core.locale.LocaleManager.currentLanguage.collectAsStateWithLifecycle()
+
+            Text(
+                text = "ภาษาแอปพลิเคชัน (App Language)",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Column(modifier = Modifier.padding(8.dp)) {
+                    com.example.soapp.core.locale.AppLanguage.entries.forEach { lang ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { com.example.soapp.core.locale.LocaleManager.setLanguage(lang) }
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = currentLang == lang,
+                                onClick = { com.example.soapp.core.locale.LocaleManager.setLanguage(lang) }
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = lang.displayName,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             // Feedback Section
             Text(
                 text = "การสนับสนุนและความคิดเห็น",
