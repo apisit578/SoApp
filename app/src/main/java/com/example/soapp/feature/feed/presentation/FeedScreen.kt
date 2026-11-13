@@ -20,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -224,7 +225,10 @@ private fun PostCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Actions row (Like, Comments)
+            // Actions row (Like, Comments, Share)
+            val context = androidx.compose.ui.platform.LocalContext.current
+            val shareUseCase = androidx.compose.runtime.remember { com.example.soapp.feature.share.domain.usecase.SharePostUseCase() }
+
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -255,6 +259,19 @@ private fun PostCard(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+
+                Spacer(modifier = Modifier.width(24.dp))
+
+                IconButton(onClick = {
+                    val payload = shareUseCase(post)
+                    android.widget.Toast.makeText(context, "คัดลอกลิงก์เรียบร้อย: ${payload.deepLinkUrl}", android.widget.Toast.LENGTH_SHORT).show()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = "แชร์โพสต์",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
