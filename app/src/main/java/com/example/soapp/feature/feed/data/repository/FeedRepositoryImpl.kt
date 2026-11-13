@@ -35,4 +35,8 @@ class FeedRepositoryImpl(
     override suspend fun getBookmarkedPosts(): Result<List<Post>> {
         return runCatching { dataSource.fetchBookmarkedPosts() }
     }
+
+    override suspend fun getPostsByTopic(topic: String): Result<List<Post>> {
+        return runCatching { dataSource.fetchPostsByTopic(topic) }
+    }
 }

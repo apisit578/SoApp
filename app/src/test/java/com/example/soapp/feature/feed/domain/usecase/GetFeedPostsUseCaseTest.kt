@@ -91,4 +91,8 @@ private class FakeFeedRepository(
     override suspend fun getBookmarkedPosts(): Result<List<Post>> {
         return Result.success(emptyList())
     }
+
+    override suspend fun getPostsByTopic(topic: String): Result<List<Post>> {
+        return Result.success(emptyList())
+    }
 }

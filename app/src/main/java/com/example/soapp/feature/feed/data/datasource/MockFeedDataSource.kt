@@ -11,6 +11,7 @@ interface MockFeedDataSource {
     suspend fun deletePost(postId: String): Boolean
     suspend fun toggleBookmark(postId: String): Post
     suspend fun fetchBookmarkedPosts(): List<Post>
+    suspend fun fetchPostsByTopic(topic: String): List<Post>
 }
 
 class MockFeedDataSourceImpl : MockFeedDataSource {
@@ -122,5 +123,11 @@ class MockFeedDataSourceImpl : MockFeedDataSource {
     override suspend fun fetchBookmarkedPosts(): List<Post> {
         delay(300)
         return posts.filter { it.isBookmarked }
+    }
+
+    override suspend fun fetchPostsByTopic(topic: String): List<Post> {
+        delay(300)
+        val cleanTopic = topic.trim().removePrefix("#")
+        return posts.filter { it.content.contains(cleanTopic, ignoreCase = true) }
     }
 }

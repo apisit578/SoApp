@@ -10,4 +10,5 @@ interface FeedRepository {
     suspend fun deletePost(postId: String): Result<Boolean>
     suspend fun toggleBookmarkPost(postId: String): Result<Post>
     suspend fun getBookmarkedPosts(): Result<List<Post>>
+    suspend fun getPostsByTopic(topic: String): Result<List<Post>>
 }

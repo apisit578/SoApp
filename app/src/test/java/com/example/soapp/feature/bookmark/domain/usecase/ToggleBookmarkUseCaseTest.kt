@@ -33,4 +33,5 @@ private class FakeBookmarkRepo : FeedRepository {
         return Result.success(Post("1", "Author", "@handle", null, "Content", "1h", 0, false, 0, isBookmarked))
     }
     override suspend fun getBookmarkedPosts(): Result<List<Post>> = Result.success(emptyList())
+    override suspend fun getPostsByTopic(topic: String): Result<List<Post>> = Result.success(emptyList())
 }

@@ -34,4 +34,5 @@ private class FakeSearchRepo(private val posts: List<Post>) : FeedRepository {
     override suspend fun deletePost(postId: String): Result<Boolean> = Result.success(true)
     override suspend fun toggleBookmarkPost(postId: String): Result<Post> = throw NotImplementedError()
     override suspend fun getBookmarkedPosts(): Result<List<Post>> = Result.success(emptyList())
+    override suspend fun getPostsByTopic(topic: String): Result<List<Post>> = Result.success(emptyList())
 }
